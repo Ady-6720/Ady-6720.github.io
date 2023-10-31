@@ -314,7 +314,7 @@ nav ul li:hover a::after {
 
 /* Add a hover effect for the project card */
 .project-card:hover {
-    transform: scale(1.5); /* Zoom in by 5% when hovered */
+    transform: scale(1.2); /* Zoom in by 5% when hovered */
     filter: brightness(1.2); /* Increase brightness of the hovered card */
     opacity: 1; /* Make the hovered card fully opaque */
 }
