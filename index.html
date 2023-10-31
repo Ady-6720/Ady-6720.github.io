@@ -12,15 +12,19 @@
         <nav>
             <img src="images\logo.png" class="logo">
             <ul>
+                <button class="hire-me-button blink" onclick="hireMe()">Hire me!</button>
                 <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Resume</a></li>
-                <li><a href="#">Contact Me</a></li>
+                <li><a href="https://www.linkedin.com/in/am6720/">About</a></li>
+                <li><a href="resume.html">Resume</a></li>
+                <li><a href="contactme.html">Contact Me</a></li>
             </ul>
         </nav>
+        <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
         <div class="header-text">
-            <p>Devoloper</p>
-            <h1>Hi, I am <span>Aditya</span></h1>
+            <p class="typing-text">Developer & Computer Science Student</p>
+            <h1>Hi, I am <span>Aditya <span class="blinking-underscore"></span></span></h1>
         </div>
     </div>
 </div>
@@ -56,20 +60,33 @@
                 </div>
                 <div class="tab-contents" id="education">
                     <ul>
-                        <li><span>2023-Present</span><br>The University of Georgia,Athens</li>
-                        <li><span>2018-2022</span><br>K.K.Wagh Instutute of engineering Education & Research, Nashik India</li>
-                        <li><span>2016-2018</span><br> K.V.N Naik ACS Junior College</li>
+                        <li>
+                            <span>MS Computer Science</span><br>
+                            <span>2023-Present</span><br>
+                            The University of Georgia, Athens
+                        </li>
+                        <li>
+                            <span>BE Electrical Engineering </span>
+                            <b class="floating-gpa">GPA 9.18</b><br>
+                            <span>2018-2022</span><br>
+                            K.K.Wagh Institute of Engineering Education & Research, Nashik, India
+                        </li>
+                        <li>
+                            <span>Junior College General Sciences</span>
+                            <b class="floating-gpa">GPA 7.31</b><br>
+                            <span>2016-2018</span><br>
+                            K.V.N Naik ACS Junior College
+                        </li>
                     </ul>
                 </div>
                 <div class="tab-contents" id="projects">
                     <ul>
-                        <li><span>C++</span><br>Programming</li>
-                        <li><span>Java</span><br>Development</li>
-                        <li><span>HTML/CSS</span><br> Web Developmet</li>
-                        <li><span>JavScript</span></li>
-                        <li><span>UI/UX</span><br> Designing Webapp Interfaces</li>
-                        <li><span>SQL</span><br>Database Designing</li>
-                        <li><span>Python</span><br> Data Analysis</li>
+                        <li><span>UGA Movie Booking Website</span><br>Development/li>
+                        <li><span>Weather app</span><br>Development</li>
+                        <li><span>TempFile autodelete using Python</span><br> Python Automation</li>
+                        <li><span>Shiksha E-Learning Website</span></li>
+                        <li><span>Neighbourhood Analysis</span><br>Data Science Project</li>
+                        <li><span>Tesla & Gamestop stock analysis</span><br>Data Science Project</li>
                     </ul>
                 </div>
             </div>
@@ -131,6 +148,12 @@
 
             <!-- Add more project cards as needed -->
         </div>
+        <div class="footer">
+            <h2>Contact Information</h2>
+            <p>Email: aditya.inc6720@gmail.com</p>
+            <p>Phone: (762) 310-9430</p>
+            <p>Address: 1000 Lakeside drive, Athens Ga 30605</p>
+        </div>
 <script>
     var tablinks = document.getElementsByClassName("tab-links");
     var tabcontents = document.getElementsByClassName("tab-contents");
@@ -145,6 +168,36 @@
         document.getElementById(tabname).classList.add("active-tab");
         event.currentTarget.classList.add("active-link");
     }
+    const textElement = document.querySelector(".typing-text");
+        const text = textElement.innerText;
+        let index = 0;
+        let isTyping = true;
+
+        function type() {
+            if (isTyping) {
+                textElement.innerText = text.slice(0, index);
+                index++;
+                if (index > text.length) {
+                    isTyping = false;
+                    setTimeout(type, 100); // Pause for 1 second after typing
+                } else {
+                    setTimeout(type, 10); // Adjust the typing speed as needed
+                }
+            } else {
+                textElement.innerText = text.slice(0, index);
+                index--;
+          
+            }
+        }
+
+        type();
+        window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    document.getElementById('progress-bar').style.width = progress + '%';
+});
+
 </script>
 </body>
 </html>
