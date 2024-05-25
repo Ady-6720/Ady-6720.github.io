@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Skills - Aditya Malode</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Roboto Mono', monospace;
+            background-color: #0d0d0d;
+            color: #f0f0f0;
+            overflow: hidden; /* Prevent scrollbar */
+            position: relative;
+            cursor: none; /* Hide the default cursor */
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            --gap: 5em;
+            --line: 1px;
+            --color: rgba(255, 255, 255, 0.2);
+            background-image: linear-gradient(
+                -90deg,
+                transparent calc(var(--gap) - var(--line)),
+                var(--color) calc(var(--gap) - var(--line) + 1px),
+                var(--color) var(--gap)
+            ),
+            linear-gradient(
+                0deg,
+                transparent calc(var(--gap) - var(--line)),
+                var(--color) calc(var(--gap) - var(--line) + 1px),
+                var(--color) var(--gap)
+            );
+            background-size: var(--gap) var(--gap);
+            pointer-events: none; /* Let mouse events pass through */
+        }
+
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background-color: transparent;
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #f0f0f0;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #a0a0a0;
+        }
+
+        #theme-toggle {
+            background: none;
+            border: none;
+            color: #f0f0f0;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .skills {
+            text-align: center;
+            padding-top: 10vh;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative; /* For z-index to work */
+            z-index: 10; /* To place skills content above grid */
+            height: calc(100vh - 80px); /* Adjust height to fit within the viewport minus header height */
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Enable vertical scrolling */
+            scrollbar-width: none; /* For Firefox */
+            -ms-overflow-style: none; /* For Internet Explorer and Edge */
+        }
+
+        .skills::-webkit-scrollbar {
+            display: none; /* For Chrome, Safari, and Opera */
+        }
+
+        .skills h1 {
+            font-size: 2.5rem;
+            margin: 0 0 2rem 0;
+            color: #ff4f81;
+            font-weight: 700;
+            letter-spacing: 0.1rem;
+        }
+
+        .skills .category {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .skills .category h2 {
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            white-space: nowrap;
+        }
+
+        .skills .category ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .skills .category ul li {
+            display: inline-flex;
+            align-items: center;
+            margin: 0.5rem;
+            font-size: 1.2rem;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .skills .category ul li:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .skills .category ul li i {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .cursor {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+        }
+
+        .cursor__ball {
+            position: absolute;
+            top: 0;
+            left: 0;
+            mix-blend-mode: difference;
+            pointer-events: none;
+        }
+
+        .cursor__ball svg {
+            display: block;
+        }
+
+        .cursor__ball--big circle {
+            fill: rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .cursor__ball--small circle {
+            fill: #fff;
+        }
+
+        .hoverable {
+            color: #fff;
+            position: relative;
+        }
+
+        .hoverable:hover {
+            cursor: none;
+            text-shadow: 0 0 10px #ff4f81;
+        }
+
+        .light-theme {
+            background-color: #f0f0f0;
+            color: #0d0d0d;
+        }
+
+        .light-theme nav ul li a,
+        .light-theme .skills h1,
+        .light-theme .category h2,
+        .light-theme #theme-toggle {
+            color: #0d0d0d;
+        }
+
+        .light-theme .skills .category ul li {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .light-theme .skills .category ul li:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .darkened {
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .highlight {
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">About</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="#">Tech Skills</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><button id="theme-toggle">🌙</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="skills">
+            <h1>Tech Skills</h1>
+            <div class="category">
+                <h2><i class="fas fa-code"></i> Programming Languages</h2>
+                <ul>
+                    <li class="hoverable"><i class="fab fa-java"></i> Java</li>
+                    <li class="hoverable"><i class="fas fa-cplusplus"></i> C++</li>
+                    <li class="hoverable"><i class="fab fa-js"></i> JavaScript</li>
+                    <li class="hoverable"><i class="fas fa-code"></i> TypeScript</li>
+                    <li class="hoverable"><i class="fas fa-code"></i> Kotlin</li>
+                    <li class="hoverable"><i class="fab fa-python"></i> Python</li>
+                </ul>
+            </div>
+            <div class="category">
+                <h2><i class="fas fa-database"></i> Database Technologies</h2>
+                <ul>
+                    <li class="hoverable"><i class="fas fa-database"></i> SQLite</li>
+                    <li class="hoverable"><i class="fas fa-database"></i> SQL</li>
+                    <li class="hoverable"><i class="fas fa-database"></i> Firebase Firestone</li>
+                    <li class="hoverable"><i class="fas fa-database"></i> Room</li>
+                    <li class="hoverable"><i class="fas fa-database"></i> MongoDB</li>
+                </ul>
+            </div>
+            <div class="category">
+                <h2><i class="fas fa-project-diagram"></i> Frameworks & Libraries</h2>
+                <ul>
+                    <li class="hoverable"><i class="fab fa-android"></i> Android Jetpack</li>
+                    <li class="hoverable"><i class="fab fa-react"></i> React</li>
+                    <li class="hoverable"><i class="fab fa-flutter"></i> Flutter</li>
+                    <li class="hoverable"><i class="fas fa-retro"></i> Retrofit</li>
+                    <li class="hoverable"><i class="fas fa-layer-group"></i> Pandas</li>
+                    <li class="hoverable"><i class="fas fa-layer-group"></i> NumPy</li>
+                </ul>
+            </div>
+            <div class="category">
+                <h2><i class="fas fa-tools"></i> Software & Tools</h2>
+                <ul>
+                    <li class="hoverable"><i class="fab fa-android"></i> Android Studio</li>
+                    <li class="hoverable"><i class="fab fa-visual-studio-code"></i> VScode</li>
+                    <li class="hoverable"><i class="fab fa-jetbrains"></i> IntelliJ IDEA</li>
+                    <li class="hoverable"><i class="fas fa-cogs"></i> Eclipse</li>
+                    <li class="hoverable"><i class="fab fa-git"></i> Git</li>
+                    <li class="hoverable"><i class="fab fa-github"></i> GitHub</li>
+                    <li class="hoverable"><i class="fas fa-cogs"></i> Gradle</li>
+                    <li class="hoverable"><i class="fab fa-jenkins"></i> Jenkins</li>
+                    <li class="hoverable"><i class="fas fa-vial"></i> JUnit</li>
+                    <li class="hoverable"><i class="fas fa-cogs"></i> ADB</li>
+                    <li class="hoverable"><i class="fab fa-aws"></i> AWS</li>
+                    <li class="hoverable"><i class="fab fa-microsoft"></i> Azure</li>
+                </ul>
+            </div>
+            <div class="category">
+                <h2><i class="fas fa-cloud"></i> Other Skills</h2>
+                <ul>
+                    <li class="hoverable"><i class="fas fa-cloud"></i> Cloud Computing</li>
+                    <li class="hoverable"><i class="fas fa-sync-alt"></i> CI/CD</li>
+                    <li class="hoverable"><i class="fas fa-vial"></i> XUnit</li>
+                    <li class="hoverable"><i class="fas fa-vial"></i> Jest</li>
+                    <li class="hoverable"><i class="fas fa-vial"></i> Cucumber</li>
+                    <li class="hoverable"><i class="fas fa-vial"></i> Nightwatch</li>
+                    <li class="hoverable"><i class="fas fa-robot"></i> Unit Testing</li>
+                    <li class="hoverable"><i class="fab fa-aws"></i> Lambda</li>
+                    <li class="hoverable"><i class="fas fa-code"></i> OOP</li>
+                    <li class="hoverable"><i class="fas fa-project-diagram"></i> Microservices</li>
+                    <li class="hoverable"><i class="fas fa-network-wired"></i> Distributed Systems</li>
+                    <li class="hoverable"><i class="fas fa-desktop"></i> Frontend</li>
+                    <li class="hoverable"><i class="fas fa-server"></i> Backend</li>
+                    <li class="hoverable"><i class="fas fa-laptop-code"></i> Full-Stack</li>
+                    <li class="hoverable"><i class="fas fa-file-alt"></i> Office Suite</li>
+                    <li class="hoverable"><i class="fab fa-windows"></i> Windows</li>
+                    <li class="hoverable"><i class="fab fa-linux"></i> Linux</li>
+                    <li class="hoverable"><i class="fas fa-laptop-code"></i> Unix</li>
+                    <li class="hoverable"><i class="fab fa-apple"></i> MacOS</li>
+                    <li class="hoverable"><i class="fas fa-file-excel"></i> Excel</li>
+                    <li class="hoverable"><i class="fab fa-wordpress"></i> WordPress</li>
+                    <li class="hoverable"><i class="fas fa-cloud"></i> Google Cloud</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <div class="cursor">
+        <div class="cursor__ball cursor__ball--big">
+            <svg height="30" width="30">
+                <circle cx="15" cy="15" r="12" stroke-width="0"></circle>
+            </svg>
+        </div>
+        <div class="cursor__ball cursor__ball--small">
+            <svg height="10" width="10">
+                <circle cx="5" cy="5" r="4" stroke-width="0"></circle>
+            </svg>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            themeToggle.textContent = document.body.classList.contains('light-theme') ? '🌞' : '🌙';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            const gridBg = document.querySelector('.grid-background');
+            const { clientX: x, clientY: y } = e;
+            gridBg.style.backgroundPosition = `${x / 10}px ${y / 10}px`;
+        });
+
+        const $bigBall = document.querySelector('.cursor__ball--big');
+        const $smallBall = document.querySelector('.cursor__ball--small');
+        const $hoverables = document.querySelectorAll('.hoverable');
+
+        document.body.addEventListener('mousemove', onMouseMove);
+        for (let i = 0; i < $hoverables.length; i++) {
+            $hoverables[i].addEventListener('mouseenter', onMouseHover);
+            $hoverables[i].addEventListener('mouseleave', onMouseHoverOut);
+        }
+
+        function onMouseMove(e) {
+            gsap.to($bigBall, {
+                duration: 0.4,
+                x: e.pageX - 15,
+                y: e.pageY - 15
+            });
+            gsap.to($smallBall, {
+                duration: 0.1,
+                x: e.pageX - 5,
+                y: e.pageY - 7
+            });
+        }
+
+        function onMouseHover() {
+            document.querySelectorAll('.hoverable').forEach(item => item.classList.add('darkened'));
+            this.classList.remove('darkened');
+            this.classList.add('highlight');
+            gsap.to($bigBall, {
+                duration: 0.3,
+                scale: 4
+            });
+        }
+
+        function onMouseHoverOut() {
+            document.querySelectorAll('.hoverable').forEach(item => item.classList.remove('darkened'));
+            this.classList.remove('highlight');
+            gsap.to($bigBall, {
+                duration: 0.3,
+                scale: 1
+            });
+        }
+    </script>
+</body>
+</html>

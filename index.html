@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aditya Malode</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background-color: #0d0d0d;
+            color: #f0f0f0;
+            overflow-y: auto;
+            position: relative;
+            cursor: none;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            --gap: 5em;
+            --line: 1px;
+            --color: rgba(255, 255, 255, 0.2);
+            background-image: linear-gradient(
+                -90deg,
+                transparent calc(var(--gap) - var(--line)),
+                var(--color) calc(var(--gap) - var(--line) + 1px),
+                var(--color) var(--gap)
+            ),
+            linear-gradient(
+                0deg,
+                transparent calc(var(--gap) - var(--line)),
+                var(--color) calc(var(--gap) - var(--line) + 1px),
+                var(--color) var(--gap)
+            );
+            background-size: var(--gap) var(--gap);
+            pointer-events: none;
+        }
+
+        header {
+            position: sticky;
+            width: 100%;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a, .resume-button {
+            text-decoration: none;
+            color: #f0f0f0;
+            font-weight: 400;
+            transition: color 0.3s, background-color 0.3s, transform 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover, .resume-button:hover {
+            color: #ff7999;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .resume-button {
+            background-color: #ff4f81;
+            color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        #theme-toggle {
+            background: none;
+            border: none;
+            color: #f0f0f0;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .intro {
+            text-align: center;
+            padding-top: 10vh;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .intro h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: #ff4f81;
+            font-weight: 700;
+            letter-spacing: 0.1rem;
+            transition: text-shadow 0.3s ease;
+        }
+
+        .intro p {
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            font-weight: 300;
+            line-height: 1.6;
+            transition: text-shadow 0.3s ease;
+        }
+
+        .intro strong {
+            font-weight: 700;
+            color: #ff4f81;
+        }
+
+        .intro a {
+            color: #ff4f81;
+            text-decoration: none;
+            border-bottom: 2px solid #ff4f81;
+            padding-bottom: 0.2rem;
+            transition: color 0.3s, border-bottom-color 0.3s;
+            transition: text-shadow 0.3s ease;
+        }
+
+        .intro a:hover {
+            color: #ff7999;
+            border-bottom-color: #ff7999;
+            text-shadow: 0 10px 10px #ff4f81;
+        }
+
+        .intro .more {
+            display: inline-block;
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .social-icons {
+            margin-top: 3rem;
+        }
+
+        .social-icons a {
+            margin: 0 1rem;
+            color: #f0f0f0;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #a0a0a0;
+        }
+
+        .scroll-instruction {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1rem;
+            font-weight: 300;
+            color: #ff4f81;
+            animation: fadeInOut 2s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .experience, .education {
+            margin-top: 15rem;
+            position: relative;
+            z-index: 5;
+            padding-left: 50px;
+        }
+
+        .experience h2, .education h2 {
+            font-size: 2.5rem;
+            color: #ff4f81;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 10px;
+            list-style: none;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #ff4f81;
+            left: 20px;
+            transform: translateX(50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 1rem 0 2rem 0;
+            padding: 1rem 1rem;
+            width: calc(100% - 70px);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.5s, opacity 0.5s;
+            transform-origin: top;
+            left: 50px;
+        }
+
+        .timeline-item-date {
+            padding: 0 1rem;
+            font-size: 1rem;
+            color: #ff4f81;
+            font-weight: bold;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-item-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff4f81;
+            top: 20px;
+            left: -30px;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item h3 {
+            font-size: 1.5rem;
+            color: #ff4f81;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-item p {
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .timeline-item:hover {
+            transform: scale(1.05);
+            z-index: 2;
+        }
+        footer {
+            text-align: center;
+            padding: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #f0f0f0;
+            position: relative;
+            z-index: 10;
+        }
+
+        footer a {
+            color: #ff4f81;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #ff7999;
+        }
+
+        .light-theme {
+            background-color: #f0f0f0;
+            color: #f5f3f3;
+        }
+
+        .light-theme .grid-background {
+            --color: rgba(74, 73, 73, 0.736);
+        }
+
+        .light-theme nav ul li a,
+        .light-theme .resume-button,
+        .light-theme .intro .more,
+        .light-theme #theme-toggle,
+        .light-theme .experience h2,
+        .light-theme .education h2,
+        .light-theme .timeline-item h3 {
+            color: #0d0d0d;
+        }
+
+        .light-theme .intro strong,
+        .light-theme .intro a {
+            color: #ff4f81;
+        }
+
+        .light-theme .intro a:hover {
+            color: #ff7999;
+            border-bottom-color: #ff7999;
+            text-shadow: 0 0 10px #ff4f81;
+        }
+
+        .light-theme .social-icons a {
+            color: #0d0d0d;
+        }
+
+        .light-theme .social-icons a:hover {
+            color: #333;
+        }
+
+        .wheel-and-hamster {
+            --dur: 1s;
+            position: relative;
+            width: 12em;
+            height: 12em;
+            font-size: 14px;
+            margin: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .wheel,
+        .hamster,
+        .hamster div,
+        .spoke {
+            position: absolute;
+        }
+
+        .wheel,
+        .spoke {
+            border-radius: 50%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .wheel {
+            background: radial-gradient(100% 100% at center, hsla(0,0%,60%,0) 47.8%, hsl(0,0%,60%) 48%);
+            z-index: 2;
+        }
+
+        .hamster {
+            animation: hamster var(--dur) ease-in-out infinite;
+            top: 50%;
+            left: calc(50% - 3.5em);
+            width: 7em;
+            height: 3.75em;
+            transform: rotate(4deg) translate(-0.8em,1.85em);
+            transform-origin: 50% 0;
+            z-index: 1;
+        }
+
+        .hamster__head {
+            animation: hamsterHead var(--dur) ease-in-out infinite;
+            background: hsl(30,90%,55%);
+            border-radius: 70% 30% 0 100% / 40% 25% 25% 60%;
+            box-shadow: 0 -0.25em 0 hsl(30,90%,80%) inset,
+            0.75em -1.55em 0 hsl(30,90%,90%) inset;
+            top: 0;
+            left: -2em;
+            width: 2.75em;
+            height: 2.5em;
+            transform-origin: 100% 50%;
+        }
+
+        .hamster__ear {
+            animation: hamsterEar var(--dur) ease-in-out infinite;
+            background: hsl(0,90%,85%);
+            border-radius: 50%;
+            box-shadow: -0.25em 0 hsl(30,90%,55%) inset;
+            top: -0.25em;
+            right: -0.25em;
+            width: 0.75em;
+            height: 0.75em;
+            transform-origin: 50% 75%;
+        }
+
+        .hamster__eye {
+            animation: hamsterEye var(--dur) linear infinite;
+            background-color: hsl(0,0%,0%);
+            border-radius: 50%;
+            top: 0.375em;
+            left: 1.25em;
+            width: 0.5em;
+            height: 0.5em;
+        }
+
+        .hamster__nose {
+            background: hsl(0,90%,75%);
+            border-radius: 35% 65% 85% 15% / 70% 50% 50% 30%;
+            top: 0.75em;
+            left: 0;
+            width: 0.2em;
+            height: 0.25em;
+        }
+
+        .hamster__body {
+            animation: hamsterBody var(--dur) ease-in-out infinite;
+            background: hsl(30,90%,90%);
+            border-radius: 50% 30% 50% 30% / 15% 60% 40% 40%;
+            box-shadow: 0.1em 0.75em 0 hsl(30,90%,55%) inset,
+            0.15em -0.5em 0 hsl(30,90%,80%) inset;
+            top: 0.25em;
+            left: 2em;
+            width: 4.5em;
+            height: 3em;
+            transform-origin: 17% 50%;
+            transform-style: preserve-3d;
+        }
+
+        .hamster__limb--fr,
+        .hamster__limb--fl {
+            clip-path: polygon(0 0,100% 0,70% 80%,60% 100%,0% 100%,40% 80%);
+            top: 2em;
+            left: 0.5em;
+            width: 1em;
+            height: 1.5em;
+            transform-origin: 50% 0;
+        }
+
+        .hamster__limb--fr {
+            animation: hamsterFRLimb var(--dur) linear infinite;
+            background: linear-gradient(hsl(30,90%,80%) 80%,hsl(0,90%,75%) 80%);
+            transform: rotate(15deg) translateZ(-1px);
+        }
+
+        .hamster__limb--fl {
+            animation: hamsterFLLimb var(--dur) linear infinite;
+            background: linear-gradient(hsl(30,90%,90%) 80%,hsl(0,90%,85%) 80%);
+            transform: rotate(15deg);
+        }
+
+        .hamster__limb--br,
+        .hamster__limb--bl {
+            border-radius: 0.75em 0.75em 0 0;
+            clip-path: polygon(0 0,100% 0,100% 30%,70% 90%,70% 100%,30% 100%,40% 90%,0% 30%);
+            top: 1em;
+            left: 2.8em;
+            width: 1.5em;
+            height: 2.5em;
+            transform-origin: 50% 30%;
+        }
+
+        .hamster__limb--br {
+            animation: hamsterBRLimb var(--dur) linear infinite;
+            background: linear-gradient(hsl(30,90%,80%) 90%,hsl(0,90%,75%) 90%);
+            transform: rotate(-25deg) translateZ(-1px);
+        }
+
+        .hamster__limb--bl {
+            animation: hamsterBLLimb var(--dur) linear infinite;
+            background: linear-gradient(hsl(30,90%,90%) 90%,hsl(0,90%,85%) 90%);
+            transform: rotate(-25deg);
+        }
+
+        .hamster__tail {
+            animation: hamsterTail var(--dur) linear infinite;
+            background: hsl(0,90%,85%);
+            border-radius: 0.25em 50% 50% 0.25em;
+            box-shadow: 0 -0.2em 0 hsl(0,90%,75%) inset;
+            top: 1.5em;
+            right: -0.5em;
+            width: 1em;
+            height: 0.5em;
+            transform: rotate(30deg) translateZ(-1px);
+            transform-origin: 0.25em 0.25em;
+        }
+
+        .spoke {
+            animation: spoke var(--dur) linear infinite;
+            background: radial-gradient(100% 100% at center,hsl(0,0%,60%) 4.8%,hsla(0,0%,60%,0) 5%),
+            linear-gradient(hsla(0,0%,55%,0) 46.9%,hsl(0,0%,65%) 47% 52.9%,hsla(0,0%,65%,0) 53%) 50% 50% / 99% 99% no-repeat;
+        }
+
+        @keyframes hamster {
+            from, to {
+                transform: rotate(4deg) translate(-0.8em,1.85em);
+            }
+            50% {
+                transform: rotate(0) translate(-0.8em,1.85em);
+            }
+        }
+
+        @keyframes hamsterHead {
+            from, 25%, 50%, 75%, to {
+                transform: rotate(0);
+            }
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: rotate(8deg);
+            }
+        }
+
+        @keyframes hamsterEye {
+            from, 90%, to {
+                transform: scaleY(1);
+            }
+            95% {
+                transform: scaleY(0);
+            }
+        }
+
+        @keyframes hamsterEar {
+            from, 25%, 50%, 75%, to {
+                transform: rotate(0);
+            }
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: rotate(12deg);
+            }
+        }
+
+        @keyframes hamsterBody {
+            from, 25%, 50%, 75%, to {
+                transform: rotate(0);
+            }
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: rotate(-2deg);
+            }
+        }
+
+        @keyframes hamsterFRLimb {
+            from, 25%, 50%, 75%, to {
+                transform: rotate(50deg) translateZ(-1px);
+            }
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: rotate(-30deg) translateZ(-1px);
+            }
+        }
+
+        @keyframes hamsterFLLimb {
+            from, 25%, 50%, 75%, to {
+                transform: rotate(-30deg);
+            }
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: rotate(50deg);
+            }
+        }
+
+        @keyframes hamsterBRLimb {
+            from, 25%, 50%, 75%, to {
+                transform: rotate(-60deg) translateZ(-1px);
+            }
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: rotate(20deg) translateZ(-1px);
+            }
+        }
+
+        @keyframes hamsterBLLimb {
+            from, 25%, 50%, 75%, to {
+                transform: rotate(20deg);
+            }
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: rotate(-60deg);
+            }
+        }
+
+        @keyframes hamsterTail {
+            from, 25%, 50%, 75%, to {
+                transform: rotate(30deg) translateZ(-1px);
+            }
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: rotate(10deg) translateZ(-1px);
+            }
+        }
+
+        @keyframes spoke {
+            from {
+                transform: rotate(0);
+            }
+            to {
+                transform: rotate(-1turn);
+            }
+        }
+
+        #main-content {
+            display: block;
+            opacity: 0;
+            transition: opacity 1s ease, transform 1s ease;
+            transform: translateY(20px);
+        }
+
+        #main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cursor {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+        }
+
+        .cursor__ball {
+            position: absolute;
+            top: 0;
+            left: 0;
+            mix-blend-mode: difference;
+            pointer-events: none;
+        }
+
+        .cursor__ball svg {
+            display: block;
+        }
+
+        .cursor__ball--big circle {
+            fill: rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .cursor__ball--small circle {
+            fill: #fff;
+        }
+
+        .hoverable {
+            color: #fff;
+            position: relative;
+        }
+
+        .hoverable:hover {
+            cursor: none;
+            text-shadow: 0 0 10px #ff4f81;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="wheel-and-hamster">
+        <div class="wheel"></div>
+        <div class="hamster">
+            <div class="hamster__body">
+                <div class="hamster__head">
+                    <div class="hamster__ear"></div>
+                    <div class="hamster__eye"></div>
+                    <div class="hamster__nose"></div>
+                </div>
+                <div class="hamster__limb hamster__limb--fr"></div>
+                <div class="hamster__limb hamster__limb--fl"></div>
+                <div class="hamster__limb hamster__limb--br"></div>
+                <div class="hamster__limb hamster__limb--bl"></div>
+                <div class="hamster__tail"></div>
+            </div>
+        </div>
+        <div class="spoke"></div>
+    </div>
+    <div id="main-content">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="resume.html" class="resume-button">Resume</a></li>
+                    <li><button id="theme-toggle">🌙</button></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="intro">
+                <h1 class="hoverable">I'm Aditya Malode</h1>
+                <p class="hoverable"><code>Welcome to the digital home of Aditya Malode, a Computer Science enthusiast with a flair for <strong>Development</strong>, <strong>User Experience</strong> and <strong>Web Design</strong>. With a passion for blending creativity and technology, I specialize in crafting seamless and engaging digital experiences.</code></p>
+                <p class="hoverable"><code>Explore my journey through <strong>CODE</strong>, where each line is a step towards <strong>Innovation & Excellence</strong>. Dive into a world where design meets development, and together, let's create something extraordinary.</code></p>
+                <a href="skills.html" class="more hoverable">See More About Me →</a>
+                <div class="social-icons">
+                    <a href="https://www.linkedin.com/in/am6720/" class="hoverable"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/Ady-6720" class="hoverable"><i class="fab fa-github"></i></a>
+                    <a href="#" class="hoverable"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hoverable"><i class="fab fa-instagram"></i></a>
+                </div>
+                <div class="scroll-instruction"><h3><strong>Scroll down to explore more</strong></h3></div>
+            </section>
+            <section class="experience">
+                <h2>Experience</h2>
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="timeline-item-date">06/2023 - 08/2023</div>
+                        <h3>Software Engineer Intern - GrunTech Solutions</h3>
+                        <p>Nashik, MH, India</p>
+                        <p>Served as core Java developer in a 5-person team, developing CRM software resulting in a 20% improvement in operational efficiency and a 25% increase in user engagement. Utilized Scrum in Agile project management, engaging with clients for requirements, streamlining timelines, and team coordination. Implemented AWS for cloud deployments and Selenium for automated testing, overhauling software quality and speeding up release cycles.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-item-date">06/2021 - 08/2021</div>
+                        <h3>Machine Learning Summer Intern - Technophilia Pvt. Ltd</h3>
+                        <p>Noida, India</p>
+                        <p>Developed UI with React.js and cleaned data with Python Pandas, increasing user interface responsiveness by 30% and data accuracy for machine learning projects by 40%. Augmented data manipulation proficiency with Pandas and NumPy, integrating SQL databases for efficient data retrieval. Optimized data manipulation workflows, achieving a 50% increase in efficiency for data cleaning and preprocessing tasks.</p>
+                    </li>
+                </ul>
+            </section>
+            
+            <section class="education">
+                <h2>Education</h2>
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="timeline-item-date">08/2023 - Present</div>
+                        <img src="pngegg.png" alt="UGA Logo" class="timeline-item-logo">
+                        <h3>Master of Science in Computer Science</h3>
+                        <p>University of Georgia, Athens, GA, USA</p>
+                        <p>GPA 3.8/4.0. Relevant Coursework: Software Engineering, Database Management Systems, Distributed Systems, Data Structures & Algorithms, Computer Networks.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-item-date">06/2018 - 08/2022</div>
+                        <h3>Bachelor of Engineering in Electrical Engineering</h3>
+                        <p>University of Pune, Nashik, MH, India</p>
+                        <p>GPA 9.18/10. Completed various projects involving machine learning, web development, and mobile app development.</p>
+                    </li>
+                </ul>
+            </section>
+        </main>
+        <footer>
+            <p>© 2024 Aditya Malode. All rights reserved.</p>
+            <p><a href="mailto:aditya@example.com">aditya.inc6720@gmail.com</a></p>
+        </footer>
+    </div>
+    <div class="cursor">
+        <div class="cursor__ball cursor__ball--big">
+            <svg height="30" width="30">
+                <circle cx="15" cy="15" r="12" stroke-width="0"></circle>
+            </svg>
+        </div>
+        <div class="cursor__ball cursor__ball--small">
+            <svg height="10" width="10">
+                <circle cx="5" cy="5" r="4" stroke-width="0"></circle>
+            </svg>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            themeToggle.textContent = document.body.classList.contains('light-theme') ? '🌞' : '🌙';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            const gridBg = document.querySelector('.grid-background');
+            const { clientX: x, clientY: y } = e;
+            gridBg.style.backgroundPosition = `${x / 10}px ${y / 10}px`;
+        });
+
+        window.addEventListener('load', () => {
+            const loader = document.querySelector('.wheel-and-hamster');
+            const mainContent = document.getElementById('main-content');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                mainContent.classList.add('visible');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
+
+        const $bigBall = document.querySelector('.cursor__ball--big');
+        const $smallBall = document.querySelector('.cursor__ball--small');
+        const $hoverables = document.querySelectorAll('.hoverable');
+
+        document.body.addEventListener('mousemove', onMouseMove);
+        for (let i = 0; i < $hoverables.length; i++) {
+            $hoverables[i].addEventListener('mouseenter', onMouseHover);
+            $hoverables[i].addEventListener('mouseleave', onMouseHoverOut);
+        }
+
+        function onMouseMove(e) {
+            gsap.to($bigBall, {
+                duration: 0.4,
+                x: e.pageX - 15,
+                y: e.pageY - 15
+            });
+            gsap.to($smallBall, {
+                duration: 0.1,
+                x: e.pageX - 5,
+                y: e.pageY - 7
+            });
+        }
+
+        function onMouseHover() {
+            gsap.to($bigBall, {
+                duration: 0.3,
+                scale: 4
+            });
+        }
+
+        function onMouseHoverOut() {
+            gsap.to($bigBall, {
+                duration: 0.3,
+                scale: 1
+            });
+        }
+
+        const items = document.querySelectorAll('.timeline-item');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                } else {
+                    entry.target.style.opacity = '0';
+                    entry.target.style.transform = 'translateY(100px)';
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        items.forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>
